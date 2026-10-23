@@ -50,7 +50,7 @@ export function parseMidi(buf) {
 // Toontrack-style drum notes → General MIDI (Logic Drum Kit / Drum Machine Designer)
 const TO_GM = {
   35: 36, 36: 36, 37: 37, 38: 38, 39: 39, 40: 38, 41: 41, 43: 43, 45: 45, 47: 47, 48: 48, 50: 50,
-  42: 42, 22: 42, 8: 42, 44: 44, 21: 44, 46: 46, 23: 46, 24: 46, 25: 46, 26: 46, 60: 46,
+  42: 42, 22: 42, 8: 42, 44: 44, 21: 44, 46: 46, 23: 42, 24: 42, 25: 46, 26: 46, 60: 46,
   49: 49, 55: 49, 57: 57, 52: 52, 51: 51, 53: 53, 59: 51, 54: 54, 56: 56, 58: 70,
 };
 // Notes with no clear General MIDI equivalent return null and are dropped in GM mode (they stay in 'original' mode).
