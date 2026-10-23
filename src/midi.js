@@ -82,6 +82,9 @@ export function buildMidi(song) {
       ev.push({ tick: 0, order: 0, data: [0xff, 0x04, ...vlq(inst.length), ...inst] });
     }
     if (program !== undefined && ch !== 9) ev.push({ tick: 0, order: 0, data: [0xc0 | ch, program & 127] });
+    for (const c of t.cc || []) { // controller automation: {controller, time (beats), value}, e.g. 1 mod, 11 expression, 64 sustain, 74 brightness
+      ev.push({ tick: Math.round(Number(c.time) * PPQ), order: 0, data: [0xb0 | ch, c.controller & 127, Math.max(0, Math.min(127, Math.round(c.value)))] });
+    }
     for (const n of t.notes || []) {
       const pitch = noteNumber(n.pitch);
       const on = Math.round(Number(n.start) * PPQ);

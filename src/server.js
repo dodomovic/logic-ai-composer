@@ -55,6 +55,11 @@ server.tool(
       program: z.number().int().min(0).max(127).optional().describe('Optional General MIDI program for players without a chosen instrument'),
       channel: z.number().int().min(0).max(15).optional(),
       notes: z.array(note).min(1),
+      cc: z.array(z.object({
+        controller: z.number().int().min(0).max(127).describe('1 modulation, 7 volume, 11 expression (swells), 64 sustain pedal (127 down, 0 up), 74 brightness/filter cutoff'),
+        time: z.number().min(0).describe('Position in beats'),
+        value: z.number().min(0).max(127),
+      })).optional().describe('Controller automation for smooth, musical dynamics: expression swells on pads/strings, sustain pedal on piano, filter sweeps on synths in build-ups'),
     })).min(1),
     lyrics: z.string().optional().describe('Full lyrics with section labels ([Verse 1], [Chorus] …); saved as a .txt next to the MIDI'),
     openInLogic: z.boolean().default(true),

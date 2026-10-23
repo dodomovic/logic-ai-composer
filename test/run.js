@@ -25,3 +25,6 @@ console.log('ok');
 const sung = buildMidi({ title: 'L', bpm: 90, tracks: [{ name: 'Vocals', notes: [{ pitch: 'D4', start: 0, duration: 1, lyric: 'Hel-' }, { pitch: 'F4', start: 1, duration: 1, lyric: 'lo' }] }] });
 assert.ok(sung.includes(Buffer.from([0xff, 0x05, 4, ...Buffer.from('Hel-')])));
 console.log('lyrics ok');
+const withCc = buildMidi({ title: 'C', bpm: 120, tracks: [{ name: 'Piano', notes: [{ pitch: 60, start: 0, duration: 1 }], cc: [{ controller: 64, time: 0, value: 127 }] }] });
+assert.ok(withCc.includes(Buffer.from([0xb0, 64, 127])));
+console.log('cc ok');

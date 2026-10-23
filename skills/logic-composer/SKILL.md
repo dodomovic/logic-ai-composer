@@ -105,6 +105,23 @@ picks their own software instrument on each track.
 - **Develop, don't just repeat**: introduce the hook softly (pluck or half-speed
   piano), then full lead, then octave-up, then octave + harmony in thirds.
 
+## Soft, harmonic, professional sound
+
+- Legato by default: melodic notes last until the next one starts (duration ≈ step),
+  pads overlap chord changes slightly; staccato only when the style asks for it.
+- Riffs rock stepwise between chord tones and keep common tones across chord
+  changes; avoid jumps larger than a fifth inside a riff.
+- Use lush voicings (add9, maj7, m9, slash chords), voice-led so each voice moves
+  by a step or stays.
+- Dynamics are gentle: velocities 45–90 for melodic parts with a soft pulse
+  (±6), not hard accents; drums under 115.
+- Add controller automation with `cc` on `write_midi`: CC11 expression swells on
+  pads, strings and leads (in on the chord, breathe out at the phrase end), CC64
+  sustain pedal on piano changing with the harmony, CC74 brightness ramps to open
+  a riff's filter over 8–16 bars in build-ups.
+- Pick soft GM programs for melodies (warm pad 89, voice lead 85, strings 48,
+  pizzicato 45, harp 46) instead of saw leads when the style is melancholic.
+
 ## Full songs of a given length
 
 When asked for a whole song ("3 minutes", "random", "something new"):
