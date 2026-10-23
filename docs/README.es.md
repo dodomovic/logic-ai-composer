@@ -7,6 +7,8 @@ en tu estilo, tonalidad y acordes. Cada parte va a su propia pista en Logic Pro,
 así que suena con **tus propios instrumentos virtuales** (Alchemy, Kontakt,
 Serum…) y se puede editar por completo.
 
+![Una canción generada (voz con letra, guitarra rítmica y solista, bajo, batería) abierta en Logic Pro, cada parte en su pista.](logic-pro.jpg)
+
 > "Lo-fi, 84 BPM, Am7 – Fmaj7 – C – G, piano, bajo y batería, 8 compases"
 > "Una canción synthwave original de 3 minutos"
 > "Convierte ~/Desktop/micancion.wav en MIDI" · "Haz un cover de jazz"

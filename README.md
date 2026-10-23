@@ -7,6 +7,8 @@ part, in your style, key and chords. Each part lands on its own track in Logic
 Pro, so it plays **your own software instruments** (Alchemy, Kontakt, Serum, …)
 and stays fully editable.
 
+![A generated song (vocals with lyrics, rhythm and lead guitar, bass, drums) opened in Logic Pro, each part on its own track.](docs/logic-pro.jpg)
+
 > "Lo-fi, 84 BPM, Am7 – Fmaj7 – C – G, piano, bass and drums, 8 bars"
 > "A 3-minute original synthwave song"
 > "Turn ~/Desktop/mysong.wav into MIDI" · "Make a jazz cover of it"

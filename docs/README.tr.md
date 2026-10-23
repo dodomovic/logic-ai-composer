@@ -7,6 +7,8 @@ istediğin tarzda, tonda ve akorlarda yazılır. Her parti Logic Pro'da ayrı bi
 kanala gelir. Böylece **kendi software enstrümanlarınla** (Alchemy, Kontakt,
 Serum…) çalar ve her notası düzenlenebilir.
 
+![Logic Pro'da açılmış bir şarkı (sözlü vokal, ritim ve solo gitar, bas, davul); her parti kendi kanalında.](logic-pro.jpg)
+
 > "Lo-fi, 84 BPM, Am7 – Fmaj7 – C – G, piyano, bas ve davul, 8 ölçü"
 > "3 dakikalık özgün bir synthwave şarkı"
 > "~/Desktop/sarkim.wav dosyasının MIDI'sini çıkar" · "Bunun caz cover'ını yap"

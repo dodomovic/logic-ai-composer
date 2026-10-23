@@ -7,6 +7,8 @@ partie, dans votre style, votre tonalité et vos accords. Chaque partie arrive s
 propre piste dans Logic Pro, elle joue donc **vos propres instruments virtuels**
 (Alchemy, Kontakt, Serum…) et reste entièrement modifiable.
 
+![Une chanson générée (voix avec paroles, guitare rythmique et solo, basse, batterie) ouverte dans Logic Pro, chaque partie sur sa piste.](logic-pro.jpg)
+
 > « Lo-fi, 84 BPM, Am7 – Fmaj7 – C – G, piano, basse et batterie, 8 mesures »
 > « Une chanson synthwave originale de 3 minutes »
 > « Transforme ~/Desktop/machanson.wav en MIDI » · « Fais-en une reprise jazz »

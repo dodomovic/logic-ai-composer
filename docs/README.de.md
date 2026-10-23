@@ -7,6 +7,8 @@ Stimme, in deinem Stil, deiner Tonart und deinen Akkorden. Jede Stimme landet au
 einer eigenen Spur in Logic Pro, spielt also **deine eigenen Software-Instrumente**
 (Alchemy, Kontakt, Serum …) und bleibt voll editierbar.
 
+![Ein erzeugter Song (Gesang mit Text, Rhythmus- und Leadgitarre, Bass, Drums) in Logic Pro, jede Stimme auf eigener Spur.](logic-pro.jpg)
+
 > „Lo-fi, 84 BPM, Am7 – Fmaj7 – C – G, Piano, Bass und Drums, 8 Takte"
 > „Ein 3-minütiger eigener Synthwave-Song"
 > „Mach aus ~/Desktop/meinsong.wav MIDI" · „Mach daraus ein Jazz-Cover"

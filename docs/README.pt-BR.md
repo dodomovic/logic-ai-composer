@@ -7,6 +7,8 @@ parte, no seu estilo, tom e acordes. Cada parte vai para a própria faixa no Log
 Pro, então toca com **os seus próprios instrumentos virtuais** (Alchemy, Kontakt,
 Serum…) e continua totalmente editável.
 
+![Uma música gerada (voz com letra, guitarra base e solo, baixo, bateria) aberta no Logic Pro, cada parte na própria faixa.](logic-pro.jpg)
+
 > "Lo-fi, 84 BPM, Am7 – Fmaj7 – C – G, piano, baixo e bateria, 8 compassos"
 > "Uma música synthwave original de 3 minutos"
 > "Transforme ~/Desktop/minhamusica.wav em MIDI" · "Faça um cover de jazz"
