@@ -1,0 +1,57 @@
+# Logic AI Composer
+
+Describe the music you want, and Claude writes the MIDI: every note of every
+part, in your style, key and chords. Each part lands on its own track in Logic
+Pro, so it plays **your own software instruments** (Alchemy, Kontakt, Serum, …)
+and stays fully editable.
+
+> "Lo-fi, 84 BPM, Am7 – Fmaj7 – C – G, piano, bass and drums, 8 bars"
+
+## How it works
+
+- Claude composes the notes (rhythm, voicing, groove, dynamics).
+- This MCP server spells chords and scales so parts stay in key, writes a
+  multi-track MIDI file, and opens it in Logic Pro.
+- In Logic, choose an instrument on each track and press play.
+
+No audio is generated and nothing about Logic Pro is modified; it only uses
+standard MIDI files.
+
+## Install
+
+Requires macOS, Logic Pro and Node.js 18+.
+
+```bash
+git clone https://github.com/<you>/logic-ai-composer.git
+cd logic-ai-composer && npm install
+```
+
+**Claude Code**
+
+```bash
+claude mcp add logic-ai-composer -- node /path/to/logic-ai-composer/src/server.js
+```
+
+Copy `skills/logic-composer` into `~/.claude/skills/` for the composing guide.
+
+**Claude Desktop**: add to `claude_desktop_config.json`:
+
+```json
+{ "mcpServers": { "logic-ai-composer": { "command": "node", "args": ["/path/to/logic-ai-composer/src/server.js"] } } }
+```
+
+Files are saved to `~/Music/Logic AI Composer` (set `LOGIC_AI_COMPOSER_DIR` to
+change it). Set `LOGIC_APP` if your Logic Pro app has a different name.
+
+## Tools
+
+| Tool | What it does |
+|---|---|
+| `chord_notes` | Chord symbols → notes (`Am7`, `Fmaj7`, `C/E`, `G7sus4`, …) |
+| `scale_notes` | Notes of a scale (major, minor, modes, pentatonic, blues, hicaz) |
+| `write_midi` | Writes the parts to a multi-track `.mid` and opens it in Logic Pro |
+
+## License
+
+MIT. Logic Pro is a trademark of Apple Inc. This project is not affiliated with
+or endorsed by Apple.
