@@ -85,8 +85,7 @@ música de 4 minutos; em Macs mais antigos ou Intel, mais.
 | `master_audio` | Masteriza uma mixagem para streaming, com relatório de loudness antes/depois |
 
 Por dentro:
-- a voz é separada com BS-RoFormer;
-- no instrumental sem voz, bateria e baixo com Demucs `htdemucs_ft`, guitarra e piano com `htdemucs_6s`;
+- voz, bateria e baixo são separados com Demucs `htdemucs_ft`, guitarra e piano com `htdemucs_6s`;
 - as partes com altura são transcritas com o Basic Pitch do Spotify, a bateria com detecção de ataques por banda;
 - a masterização usa o Pedalboard do Spotify, e a loudness é medida com pyloudnorm (ITU-R BS.1770).
 

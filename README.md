@@ -84,8 +84,7 @@ for a 4-minute song; older or Intel Macs take longer.
 | `master_audio` | Masters a bounced mix for streaming, with a before/after loudness report |
 
 Under the hood:
-- vocals are split with BS-RoFormer;
-- drums and bass with Demucs `htdemucs_ft`, guitar and piano with `htdemucs_6s`, run on the vocal-free instrumental;
+- vocals, drums and bass are split with Demucs `htdemucs_ft`, guitar and piano with `htdemucs_6s`;
 - pitched parts are transcribed with Spotify's Basic Pitch, drums with per-band onset detection;
 - mastering uses Spotify's Pedalboard, and loudness is measured with pyloudnorm (ITU-R BS.1770).
 

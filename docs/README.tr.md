@@ -84,8 +84,7 @@ birkaç dakikadan 10 dakikaya kadar sürebilir; eski ya da Intel Mac'lerde daha 
 | `master_audio` | Bounce edilmiş mix'i yayın platformları için master eder, önce/sonra ses seviyesi raporu verir |
 
 Arka planda:
-- vokal BS-RoFormer ile ayrılır;
-- vokalsiz enstrüman kısmından davul ve bas Demucs `htdemucs_ft` ile, gitar ve piyano `htdemucs_6s` ile ayrılır;
+- vokal, davul ve bas Demucs `htdemucs_ft` ile, gitar ve piyano `htdemucs_6s` ile ayrılır;
 - notalı partiler Spotify'ın Basic Pitch'i ile, davullar frekans bandı bazlı vuruş algılamayla MIDI'ye çevrilir;
 - mastering Spotify'ın Pedalboard'u ile yapılır, ses seviyesi pyloudnorm ile ölçülür (ITU-R BS.1770).
 

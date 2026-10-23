@@ -85,8 +85,7 @@ etwa 10 Minuten für einen 4-minütigen Song; ältere oder Intel-Macs brauchen l
 | `master_audio` | Mastert einen Mixdown für Streaming, mit Lautheitsbericht vorher/nachher |
 
 Unter der Haube:
-- der Gesang wird mit BS-RoFormer getrennt;
-- auf dem gesangsfreien Instrumental Drums und Bass mit Demucs `htdemucs_ft`, Gitarre und Piano mit `htdemucs_6s`;
+- Gesang, Drums und Bass werden mit Demucs `htdemucs_ft` getrennt, Gitarre und Piano mit `htdemucs_6s`;
 - tonale Stimmen werden mit Spotifys Basic Pitch transkribiert, Drums mit bandweiser Onset-Erkennung;
 - das Mastering nutzt Spotifys Pedalboard, die Lautheit wird mit pyloudnorm gemessen (ITU-R BS.1770).
 

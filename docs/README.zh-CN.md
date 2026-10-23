@@ -70,8 +70,7 @@ npm run setup-audio
 | `master_audio` | 为流媒体处理混音母带，并给出处理前后的响度报告 |
 
 内部实现：
-- 人声用 BS-RoFormer 分离；
-- 在去掉人声的伴奏上，鼓和贝斯用 Demucs `htdemucs_ft` 分离，吉他和钢琴用 `htdemucs_6s` 分离；
+- 人声、鼓和贝斯用 Demucs `htdemucs_ft` 分离，吉他和钢琴用 `htdemucs_6s` 分离；
 - 有音高的声部用 Spotify 的 Basic Pitch 扒谱，鼓用分频段起音检测；
 - 母带处理使用 Spotify 的 Pedalboard，响度用 pyloudnorm 测量（ITU-R BS.1770）。
 

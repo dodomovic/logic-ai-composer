@@ -70,8 +70,7 @@ Finder からファイルを Claude Code の入力欄にドラッグする（パ
 | `master_audio` | ミックスをストリーミング向けにマスタリングし、前後のラウドネスを報告 |
 
 内部の仕組み：
-- ボーカルは BS-RoFormer で分離します。
-- ボーカルを除いたインスト音源から、ドラムとベースを Demucs `htdemucs_ft`、ギターとピアノを `htdemucs_6s` で分離します。
+- ボーカル、ドラム、ベースは Demucs `htdemucs_ft`、ギターとピアノは `htdemucs_6s` で分離します。
 - 音程のあるパートは Spotify の Basic Pitch、ドラムは帯域ごとのオンセット検出で採譜します。
 - マスタリングには Spotify の Pedalboard を使い、ラウドネスは pyloudnorm（ITU-R BS.1770）で測定します。
 

@@ -70,8 +70,7 @@ Finder에서 파일을 Claude Code 입력창으로 드래그하거나(경로가 
 | `master_audio` | 믹스를 스트리밍용으로 마스터링하고 전후 라우드니스를 보고합니다 |
 
 내부 구성:
-- 보컬은 BS-RoFormer로 분리합니다.
-- 보컬을 뺀 반주에서 드럼과 베이스는 Demucs `htdemucs_ft`, 기타와 피아노는 `htdemucs_6s`로 분리합니다.
+- 보컬, 드럼, 베이스는 Demucs `htdemucs_ft`로, 기타와 피아노는 `htdemucs_6s`로 분리합니다.
 - 음정이 있는 파트는 Spotify의 Basic Pitch로, 드럼은 대역별 온셋 검출로 채보합니다.
 - 마스터링은 Spotify의 Pedalboard를 쓰고, 라우드니스는 pyloudnorm(ITU-R BS.1770)으로 측정합니다.
 

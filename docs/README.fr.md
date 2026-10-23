@@ -89,8 +89,7 @@ environ 10 minutes pour une chanson de 4 minutes ; plus sur un Mac ancien ou Int
 | `master_audio` | Masterise un mixage pour le streaming, avec rapport de loudness avant/après |
 
 Sous le capot :
-- la voix est séparée avec BS-RoFormer ;
-- sur l'instrumental sans voix, batterie et basse avec Demucs `htdemucs_ft`, guitare et piano avec `htdemucs_6s` ;
+- voix, batterie et basse sont séparées avec Demucs `htdemucs_ft`, guitare et piano avec `htdemucs_6s` ;
 - les parties mélodiques sont transcrites avec Basic Pitch de Spotify, la batterie par détection d'attaques par bande ;
 - le mastering utilise Pedalboard de Spotify, et la loudness est mesurée avec pyloudnorm (ITU-R BS.1770).
 
