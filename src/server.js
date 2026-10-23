@@ -108,6 +108,26 @@ server.tool(
   },
 );
 
+server.tool(
+  'master_audio',
+  'Master a mixdown bounced from Logic for streaming: tonal balance, glue compression, limiter, loudness to the target ' +
+    '(Spotify/Apple Music/YouTube ≈ -14 LUFS, true peak ≤ -1 dBTP). Writes a 24-bit WAV and returns a before/after loudness report.',
+  {
+    file: z.string().describe('Absolute path to the bounced WAV/AIFF'),
+    targetLufs: z.number().min(-24).max(-6).default(-14),
+    ceilingDbtp: z.number().min(-3).max(0).default(-1),
+  },
+  async ({ file, targetLufs, ceilingDbtp }) => {
+    if (!existsSync(PYTHON)) return { isError: true, content: [{ type: 'text', text: `Audio tools are not installed. Run: npm run setup-audio (installs into ${AUDIO_HOME}).` }] };
+    if (!existsSync(file)) return { isError: true, content: [{ type: 'text', text: `File not found: ${file}` }] };
+    mkdirSync(OUT_DIR, { recursive: true });
+    const out = join(OUT_DIR, `${basename(file).replace(/\.[^.]+$/, '')} (Master ${targetLufs} LUFS).wav`);
+    const json = await new Promise((resolve, reject) => execFile(PYTHON, [new URL('../audio/master.py', import.meta.url).pathname, file, out, String(targetLufs), String(ceilingDbtp)],
+      { maxBuffer: 8 << 20 }, (err, stdout, stderr) => (err ? reject(new Error(stderr.split('\n').slice(-5).join('\n'))) : resolve(stdout))));
+    return { content: [{ type: 'text', text: JSON.stringify(JSON.parse(json), null, 1) }] };
+  },
+);
+
 function logicApp() {
   return process.env.LOGIC_APP || (existsSync('/Applications/Logic Pro.app') ? 'Logic Pro' : existsSync('/Applications/Logic Pro Creator Studio.app') ? 'Logic Pro Creator Studio' : 'Logic Pro');
 }

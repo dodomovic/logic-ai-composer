@@ -51,6 +51,7 @@ change it). Set `LOGIC_APP` if your Logic Pro app has a different name.
 | `scale_notes` | Notes of a scale (major, minor, modes, pentatonic, blues, hicaz) |
 | `write_midi` | Writes the parts to a multi-track `.mid` and opens it in Logic Pro |
 | `audio_to_midi` | Song → stems (vocals, bass, guitar, piano, other, drums) → multi-track MIDI; needs `npm run setup-audio` |
+| `master_audio` | Masters a bounced mix for streaming (-14 LUFS, ≤ -1 dBTP, 24-bit WAV) with a loudness report |
 
 ## License
 

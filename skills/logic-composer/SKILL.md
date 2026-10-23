@@ -92,3 +92,28 @@ When asked for a whole song ("3 minutes", "random", "something new"):
    detected chords, swung ride pattern, melody kept with swung phrasing.
 3. Write the result with `write_midi` and say which parts came from the original.
 Only cover music the user owns or has the rights to.
+
+## Mix, master and Dolby Atmos
+
+MIDI has no sound until Logic plays it with the user's instruments, so the user
+bounces in Logic (File → Bounce → Project or Section; WAV 24-bit, no normalize).
+Then:
+
+- **Stereo master**: call `master_audio` on the bounce. Defaults suit Spotify, Apple
+  Music, YouTube, Tidal and Deezer (-14 LUFS integrated, ≤ -1 dBTP). Report the
+  before/after numbers. It meets the platforms' technical specs; say honestly that a
+  human mastering engineer may still do better for the user's taste.
+- **Mix starting point** (tell the user, per track in Logic): Bass and Kick centre,
+  kick/bass sidechain or EQ split (kick ~60 Hz, bass ~100 Hz), high-pass everything
+  except kick and bass around 80–120 Hz, guitars panned ±60–80, pads wide, lead and
+  vocals centre at the loudest point, bus compression 2:1 on the mix, leave ~-6 dBFS
+  headroom before mastering.
+- **Dolby Atmos** (Apple Music Spatial Audio) is done in Logic itself:
+  1. Project Settings → Audio → Spatial Audio: Dolby Atmos (sets 7.1.4 and the renderer).
+  2. Beds: drums, bass, lead and vocals on the bed (front/centre). Objects: pads,
+     guitars, FX, backing vocals, placed with the 3D panner (wide and slightly up,
+     movement only for effects).
+  3. Monitor with Binaural (headphones), keep loudness at -18 LKFS integrated and
+     true peak ≤ -1 dBTP (Apple Music Atmos spec), using Logic's Dolby Atmos plug-in meter.
+  4. File → Export → Project as ADM BWF, which distributors accept for Apple Music
+     Spatial Audio, plus the stereo master above.
