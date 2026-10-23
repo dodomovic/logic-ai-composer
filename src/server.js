@@ -13,6 +13,7 @@ import { execFile } from 'node:child_process';
 import { buildMidi } from './midi.js';
 import { DRUM_STYLES, programDrums, programDrumsFromLibrary } from './drums.js';
 import { buildLibrary, loadLibrary, saveLibrary } from './library.js';
+import { buildProject, renderProject, reaperReady, TEMPLATE } from './reaper.js';
 import { chordNotes, noteName, scaleNotes, KNOWN_SCALES } from './theory.js';
 
 const OUT_DIR = process.env.LOGIC_AI_COMPOSER_DIR || join(homedir(), 'Music', 'Logic AI Composer');
@@ -163,6 +164,33 @@ server.tool(
     const file = saveLibrary(grooves);
     const types = grooves.reduce((a, g) => ({ ...a, [g.type]: (a[g.type] || 0) + 1 }), {});
     return { content: [{ type: 'text', text: `Library saved to ${file}: ${grooves.length} grooves ${JSON.stringify(types)}.` }] };
+  },
+);
+
+server.tool(
+  'render_audio',
+  'Turn a MIDI file written by write_midi into a finished, mixed and mastered song automatically: REAPER plays every track ' +
+    'with the instruments of the user\'s template project (their own plug-ins and sounds), renders it headlessly, then it is mastered ' +
+    'for streaming (-14 LUFS, ≤ -1 dBTP) and saved as WAV and MP3. Call it after write_midi so the user gets audio, not just MIDI.',
+  {
+    midiFile: z.string().describe('Path of the .mid returned by write_midi'),
+    bpm: z.number().min(20).max(300),
+    bars: z.number().int().min(1).describe('Song length in bars (4/4)'),
+  },
+  async ({ midiFile, bpm, bars }) => {
+    if (!reaperReady()) return { isError: true, content: [{ type: 'text', text: `REAPER or the instrument template is missing (${TEMPLATE}). Install REAPER and create the template first.` }] };
+    const title = basename(midiFile).replace(/\.mid$/i, '');
+    const outDir = join(OUT_DIR, 'Renders', title);
+    const { project, wav, tracks } = buildProject({ midiFile, outDir, title, bpm, lengthBeats: bars * 4 });
+    await renderProject(project);
+    if (!existsSync(wav)) return { isError: true, content: [{ type: 'text', text: `REAPER did not produce ${wav}. Open ${project} in REAPER to check.` }] };
+    const master = join(outDir, `${title} (master).wav`);
+    const report = await new Promise((resolve, reject) => execFile(PYTHON, [new URL('../audio/master.py', import.meta.url).pathname, wav, master],
+      { maxBuffer: 8 << 20 }, (err, stdout, stderr) => (err ? reject(new Error(stderr.split('\n').slice(-5).join('\n'))) : resolve(JSON.parse(stdout)))));
+    const mp3 = join(outDir, `${title}.mp3`);
+    await new Promise((resolve) => execFile('ffmpeg', ['-loglevel', 'error', '-y', '-i', master, '-c:a', 'libmp3lame', '-b:a', '320k', mp3], () => resolve()));
+    return { content: [{ type: 'text', text: `Rendered ${tracks} tracks in REAPER and mastered.\nWAV: ${master}\nMP3: ${mp3}\nREAPER project: ${project}\n` +
+      `Loudness ${report.after.lufs} LUFS, true peak ${report.after.true_peak_dbtp} dBTP.` }] };
   },
 );
 

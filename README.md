@@ -119,3 +119,14 @@ else's song may need the rights holder's licence.
 MIT. Logic Pro and Dolby Atmos are trademarks of their owners (Apple Inc., Dolby
 Laboratories). This project is not affiliated with or endorsed by them. Models
 downloaded by `setup-audio` keep their own licenses.
+
+## Fully automatic audio (REAPER)
+
+With [REAPER](https://www.reaper.fm) installed, `render_audio` turns the MIDI into a finished song with no
+manual steps: each part is played by your own instruments, levels are set per role, REAPER renders
+headlessly, and the result is mastered for streaming and saved as WAV and MP3.
+
+One-time setup: create `~/Documents/LogicAIComposer/LAC Template.RPP` with one track per role
+(`Drums`, `Sub Bass`, `Bass`, `Lead`, `Pluck`, `Arp`, `Pad`, `Strings`, `Choir`, `Piano`), each with the
+instrument and sound you like (for example EZdrummer, Analog Lab, Nexus, Serum), and any master FX.
+Set `LAC_REAPER_TEMPLATE` to use another path.

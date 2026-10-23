@@ -11,6 +11,9 @@ picks their own software instrument on each track.
 
 ## Workflow
 
+Make exactly **one song per request**, in the style the user asked for. Don't
+offer several variations unless they ask.
+
 1. **Read the request** for: style/genre, key or chords, tempo, meter, length
    (bars), instruments, mood, and anything about rhythm or density. Ask one short
    question only if the instruments or length are truly unclear; otherwise use
@@ -21,7 +24,9 @@ picks their own software instrument on each track.
    `start` and `duration` in beats (quarter notes), and `velocity`.
 4. **Call `write_midi`** once with all tracks. Name tracks by instrument
    ("Piano", "Bass", "Drums", "Strings") so they show up clearly in Logic.
-5. Tell the user what you wrote (bars, parts, groove) and that they can choose
+5. If `render_audio` is available, call it right after `write_midi` (same `bpm`,
+   `bars`) so the user gets a mixed and mastered WAV/MP3 without touching a DAW.
+6. Tell the user what you wrote (bars, parts, groove) and that they can choose
    their own instrument on each track and edit any note.
 
 ## Writing good parts
