@@ -5,5 +5,5 @@ set -e
 HOME_DIR="${LOGIC_AI_AUDIO_HOME:-$HOME/.logic-ai-composer}"
 mkdir -p "$HOME_DIR"
 python3.11 -m venv "$HOME_DIR/venv" 2>/dev/null || python3 -m venv "$HOME_DIR/venv"
-"$HOME_DIR/venv/bin/pip" install -q demucs basic-pitch librosa soundfile pedalboard pyloudnorm "setuptools<81"
+"$HOME_DIR/venv/bin/pip" install -q demucs basic-pitch librosa soundfile pedalboard pyloudnorm audio-separator onnxruntime "setuptools<81"
 echo "Audio tools installed in $HOME_DIR"

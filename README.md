@@ -64,6 +64,21 @@ or endorsed by Apple.
 npm run setup-audio   # installs Demucs + Basic Pitch locally (~2 GB, set LOGIC_AI_AUDIO_HOME to choose the folder)
 ```
 
+Don't upload the song as a chat attachment: attachments go to Claude's servers and
+the tool can't reach them. Drag the file from Finder into the Claude Code prompt
+(it pastes the path) or type where it is, e.g. "my Desktop/mysong.wav". The audio
+never leaves your Mac.
+
 Then ask Claude: "turn ~/Desktop/mysong.wav into MIDI" or "make a lo-fi cover of
 ~/Desktop/mysong.wav". Separation and transcription run on your Mac; nothing is uploaded.
 You can also ask for a brand-new song of any length: "a 3-minute original synthwave track".
+
+## Originality and copyright
+
+When Claude writes a song, it composes new notes from the style you describe; it
+does not look up or copy recordings. The composing guide tells it not to reproduce
+existing melodies or chord-for-chord copies of known songs. Style itself (lo-fi,
+synthwave, a tempo, a chord progression like I–V–vi–IV) isn't protected, but a
+recognisable melody is. You are responsible for what you release: if a melody
+sounds familiar, change it or check before publishing. Only cover or transcribe
+music you own or have the rights to.

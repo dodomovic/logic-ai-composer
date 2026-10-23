@@ -38,15 +38,26 @@ def analyze(y, sr):
     return round(bpm, 1), {'tonic': best[1], 'mode': best[2]}
 
 
+VOCAL_MODEL = 'model_bs_roformer_ep_317_sdr_12.9755.ckpt'  # BS-RoFormer (ViperX): vocals 11.8, instrumental 16.5 SDR
+
+
 def separate(audio, work):
+    # 1. BS-RoFormer splits vocals from the instrumental (best open vocal model).
+    # 2. On the vocal-free instrumental, htdemucs_ft gives the cleanest drums and bass
+    #    and htdemucs_6s adds guitar and piano.
     import demucs.separate
-    # Best of both: the fine-tuned 4-stem model is cleanest for vocals, drums and bass;
-    # the 6-stem model adds guitar and piano. 'other' then comes from the 6-stem split.
+    from audio_separator.separator import Separator
     name = Path(audio).stem
+    rof = work / 'roformer' / name
+    rof.mkdir(parents=True, exist_ok=True)
+    sep = Separator(output_dir=str(rof), model_file_dir=str(work.parent / 'models' / 'separator'), output_format='WAV')
+    sep.load_model(VOCAL_MODEL)
+    sep.separate(str(audio), {'Vocals': 'vocals', 'Instrumental': 'instrumental'})
+    inst = rof / 'instrumental.wav'
     for model in ('htdemucs_ft', 'htdemucs_6s'):
-        demucs.separate.main(['-n', model, '--shifts', '4', '--overlap', '0.5', '-o', str(work), str(audio)])
-    ft, six = work / 'htdemucs_ft' / name, work / 'htdemucs_6s' / name
-    return {'vocals': ft / 'vocals.wav', 'drums': ft / 'drums.wav', 'bass': ft / 'bass.wav',
+        demucs.separate.main(['-n', model, '--shifts', '4', '--overlap', '0.5', '-o', str(work), str(inst)])
+    ft, six = work / 'htdemucs_ft' / 'instrumental', work / 'htdemucs_6s' / 'instrumental'
+    return {'vocals': rof / 'vocals.wav', 'drums': ft / 'drums.wav', 'bass': ft / 'bass.wav',
             'guitar': six / 'guitar.wav', 'piano': six / 'piano.wav', 'other': six / 'other.wav'}
 
 
