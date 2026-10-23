@@ -69,8 +69,9 @@ onlara erişemez. Dosyayı Finder'dan Claude Code'un yazı kutusuna sürükle (y
 kendisi yazar) ya da yerini yaz, örneğin "Masaüstü/sarkim.wav". Ses dosyası
 Mac'inden hiç çıkmaz.
 
-4 dakikalık bir şarkıyı ayırmak yaklaşık 10 dakika sürer, çünkü en kaliteli
-modeller kullanılır.
+Ayırma işleminde en kaliteli modeller kullanıldığı için biraz zaman alır. Süre
+bilgisayarına göre değişir: Apple Silicon bir Mac'te 4 dakikalık bir şarkı için
+birkaç dakikadan 10 dakikaya kadar sürebilir; eski ya da Intel Mac'lerde daha uzun sürer.
 
 ## Araçlar
 

@@ -70,8 +70,9 @@ ferramenta não consegue acessá-los. Arraste o arquivo do Finder para a caixa d
 Claude Code (o caminho é colado) ou escreva onde ele está, ex.
 "Mesa/minhamusica.wav". O áudio nunca sai do seu Mac.
 
-Separar uma música de 4 minutos leva cerca de 10 minutos, porque são usados os
-modelos de melhor qualidade.
+A separação usa os modelos de melhor qualidade, então leva algum tempo. Depende do
+seu Mac: num Mac com Apple Silicon, de alguns minutos até cerca de 10 para uma
+música de 4 minutos; em Macs mais antigos ou Intel, mais.
 
 ## Ferramentas
 

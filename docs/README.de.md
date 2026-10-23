@@ -70,8 +70,9 @@ und das Werkzeug kommt nicht an sie heran. Zieh die Datei aus dem Finder in das
 Eingabefeld von Claude Code (der Pfad wird eingefügt) oder schreib, wo sie liegt,
 z. B. „Schreibtisch/meinsong.wav". Das Audio verlässt deinen Mac nie.
 
-Das Trennen eines 4-minütigen Songs dauert etwa 10 Minuten, weil die Modelle mit
-der besten Qualität verwendet werden.
+Die Trennung nutzt die Modelle mit der besten Qualität und braucht daher etwas Zeit.
+Wie lange, hängt von deinem Mac ab: auf einem Apple-Silicon-Mac einige Minuten bis
+etwa 10 Minuten für einen 4-minütigen Song; ältere oder Intel-Macs brauchen länger.
 
 ## Werkzeuge
 

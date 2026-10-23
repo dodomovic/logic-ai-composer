@@ -74,8 +74,9 @@ le Finder dans la zone de saisie de Claude Code (le chemin est collé), ou indiq
 où il se trouve, par ex. « Bureau/machanson.wav ». L'audio ne quitte jamais votre
 Mac.
 
-Séparer une chanson de 4 minutes prend environ 10 minutes, car les modèles de
-meilleure qualité sont utilisés.
+La séparation utilise les modèles de meilleure qualité, elle prend donc du temps.
+La durée dépend de votre Mac : sur un Mac Apple Silicon, de quelques minutes à
+environ 10 minutes pour une chanson de 4 minutes ; plus sur un Mac ancien ou Intel.
 
 ## Outils
 

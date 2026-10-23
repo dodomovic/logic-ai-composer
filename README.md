@@ -69,8 +69,9 @@ the tool can't reach them. Drag the file from Finder into the Claude Code prompt
 (it pastes the path), or type where it is, e.g. "Desktop/mysong.wav". The audio
 never leaves your Mac.
 
-Separating a 4-minute song takes about 10 minutes, because it uses the
-best-quality models.
+Separation uses the best-quality models, so it takes a while. How long depends on
+your Mac: on an Apple Silicon Mac, expect several minutes up to roughly 10 minutes
+for a 4-minute song; older or Intel Macs take longer.
 
 ## Tools
 

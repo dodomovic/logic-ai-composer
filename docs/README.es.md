@@ -69,8 +69,9 @@ Claude y la herramienta no puede acceder a ellos. Arrastra el archivo desde Find
 al cuadro de Claude Code (pega la ruta) o escribe dónde está, p. ej.
 "Escritorio/micancion.wav". El audio nunca sale de tu Mac.
 
-Separar una canción de 4 minutos tarda unos 10 minutos, porque usa los modelos de
-mejor calidad.
+La separación usa los modelos de mejor calidad, así que lleva tiempo. Depende de tu
+Mac: en un Mac con Apple Silicon, de varios minutos hasta unos 10 para una canción
+de 4 minutos; en Mac más antiguos o Intel, más.
 
 ## Herramientas
 
