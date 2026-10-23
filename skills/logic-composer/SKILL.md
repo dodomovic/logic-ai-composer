@@ -65,3 +65,30 @@ picks their own software instrument on each track.
   ]
 }
 ```
+
+## Full songs of a given length
+
+When asked for a whole song ("3 minutes", "random", "something new"):
+
+- Bars = minutes × BPM ÷ beats per bar (3 min at 120 BPM in 4/4 = 90 bars).
+- If the style, key or chords are not given, choose them yourself and say what you chose.
+  Make it original: no existing melodies or chord-for-chord copies of known songs.
+- Plan a structure first, e.g. Intro 8 – Verse 16 – Pre 8 – Chorus 16 – Verse 16 –
+  Chorus 16 – Bridge 8 – Chorus 16 – Outro 8, and give each section its own
+  progression, density and dynamics (sparser verses, fuller choruses, fills before
+  section changes, a crash on each chorus downbeat).
+- Repeat sections with small variations rather than rewriting from scratch.
+- Very long songs can be written as several `write_midi` calls (one per section,
+  same tempo and key) if one call gets too large; tell the user to place them in order.
+
+## Covers and arrangements of the user's own songs
+
+1. Call `audio_to_midi` on the file. It separates the song into stems
+   (vocals, bass, guitar, piano, other, drums) and returns tempo, key and the notes.
+2. Keep the song's melody and harmony; change the style the user asked for:
+   rhythm and groove, voicings, instrumentation, tempo (scale every start and
+   duration by old BPM ÷ new BPM only if they want it faster/slower in feel).
+   Example "jazz cover": walking bass on the same roots, rootless 7th voicings of the
+   detected chords, swung ride pattern, melody kept with swung phrasing.
+3. Write the result with `write_midi` and say which parts came from the original.
+Only cover music the user owns or has the rights to.

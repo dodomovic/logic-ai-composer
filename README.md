@@ -50,8 +50,19 @@ change it). Set `LOGIC_APP` if your Logic Pro app has a different name.
 | `chord_notes` | Chord symbols → notes (`Am7`, `Fmaj7`, `C/E`, `G7sus4`, …) |
 | `scale_notes` | Notes of a scale (major, minor, modes, pentatonic, blues, hicaz) |
 | `write_midi` | Writes the parts to a multi-track `.mid` and opens it in Logic Pro |
+| `audio_to_midi` | Song → stems (vocals, bass, guitar, piano, other, drums) → multi-track MIDI; needs `npm run setup-audio` |
 
 ## License
 
 MIT. Logic Pro is a trademark of Apple Inc. This project is not affiliated with
 or endorsed by Apple.
+
+## Audio to MIDI and covers (optional)
+
+```bash
+npm run setup-audio   # installs Demucs + Basic Pitch locally (~2 GB, set LOGIC_AI_AUDIO_HOME to choose the folder)
+```
+
+Then ask Claude: "turn ~/Desktop/mysong.wav into MIDI" or "make a lo-fi cover of
+~/Desktop/mysong.wav". Separation and transcription run on your Mac; nothing is uploaded.
+You can also ask for a brand-new song of any length: "a 3-minute original synthwave track".
