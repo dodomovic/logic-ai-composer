@@ -104,7 +104,8 @@ server.tool(
     if (openInLogic && process.platform === 'darwin') execFile('open', ['-a', logicApp(), out], () => {});
     const summary = result.tracks.map((t) => `${t.name}: ${t.notes.length} notes`).join(', ');
     return { content: [{ type: 'text', text: `Saved ${out}. Tempo ~${result.bpm} BPM, key ${result.key.tonic} ${result.key.mode}. ${summary}.\n` +
-      `Notes (beats) for a cover:\n${JSON.stringify(result.tracks.map((t) => ({ name: t.name, notes: t.notes.slice(0, 400) })))}` }] };
+      `All notes for a cover, one per line as "pitch start duration velocity" (beats, MIDI numbers; lossless, compact to save tokens):\n` +
+      result.tracks.map((t) => `## ${t.name}\n${t.notes.map((n) => `${n.pitch} ${n.start} ${n.duration} ${n.velocity}`).join('\n')}`).join('\n') }] };
   },
 );
 

@@ -40,9 +40,14 @@ def analyze(y, sr):
 
 def separate(audio, work):
     import demucs.separate
-    # 6-stem model: vocals, drums, bass, guitar, piano, other
-    demucs.separate.main(['-n', 'htdemucs_6s', '--shifts', '2', '-o', str(work), str(audio)])
-    return work / 'htdemucs_6s' / Path(audio).stem
+    # Best of both: the fine-tuned 4-stem model is cleanest for vocals, drums and bass;
+    # the 6-stem model adds guitar and piano. 'other' then comes from the 6-stem split.
+    name = Path(audio).stem
+    for model in ('htdemucs_ft', 'htdemucs_6s'):
+        demucs.separate.main(['-n', model, '--shifts', '4', '--overlap', '0.5', '-o', str(work), str(audio)])
+    ft, six = work / 'htdemucs_ft' / name, work / 'htdemucs_6s' / name
+    return {'vocals': ft / 'vocals.wav', 'drums': ft / 'drums.wav', 'bass': ft / 'bass.wav',
+            'guitar': six / 'guitar.wav', 'piano': six / 'piano.wav', 'other': six / 'other.wav'}
 
 
 def audible(path, mix_rms):
@@ -119,15 +124,15 @@ def main():
         stems = separate(audio, work)
         mix_rms = float(np.sqrt(np.mean(y ** 2)))
         for stem in ('vocals', 'bass', 'guitar', 'piano', 'other'):
-            f = stems / f'{stem}.wav'
+            f = stems[stem]
             if f.exists() and audible(f, mix_rms):
                 log(f'transcribing {stem}...')
                 notes = pitched(f, bpm, stem)
                 if notes:
                     tracks.append({'name': PARTS[stem], 'notes': notes})
-        if (stems / 'drums.wav').exists():
+        if stems['drums'].exists():
             log('transcribing drums...')
-            tracks.append({'name': 'Drums', 'notes': drums(stems / 'drums.wav', bpm)})
+            tracks.append({'name': 'Drums', 'notes': drums(stems['drums'], bpm)})
     out.write(json.dumps({'bpm': bpm, 'key': key, 'tracks': tracks}))
 
 
