@@ -3,8 +3,16 @@
   "version": "0.1.0",
   "description": "Let Claude write MIDI parts in any style and chords, played by your own software instruments in Logic Pro.",
   "type": "module",
-  "bin": { "logic-ai-composer": "src/server.js" },
-  "scripts": { "test": "node test/run.js" },
+  "bin": {
+    "logic-ai-composer": "src/server.js"
+  },
+  "scripts": {
+    "test": "node test/run.js",
+    "setup-audio": "sh scripts/setup-audio.sh"
+  },
   "license": "MIT",
-  "dependencies": { "@modelcontextprotocol/sdk": "1.32.1", "zod": "^3.23.8" }
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.1",
+    "zod": "^3.23.8"
+  }
 }
