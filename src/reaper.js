@@ -28,7 +28,30 @@ export function splitMidi(buf) {
   for (let i = 0; i < n; i++) { const len = buf.readUInt32BE(p + 4); chunks.push(buf.subarray(p, p + 8 + len)); p += 8 + len; }
   const name = (c) => { const i = c.indexOf(Buffer.from([0xff, 0x03])); return i < 0 ? '' : c.toString('utf8', i + 3, i + 3 + c[i + 2]); };
   const header = (tracks) => { const h = Buffer.alloc(14); h.write('MThd'); h.writeUInt32BE(6, 4); h.writeUInt16BE(1, 8); h.writeUInt16BE(tracks, 10); h.writeUInt16BE(ppq, 12); return h; };
-  return chunks.slice(1).map((c) => ({ name: name(c), bytes: Buffer.concat([header(2), chunks[0], c]) }));
+  return chunks.slice(1).map((c) => ({ name: name(c), bytes: Buffer.concat([header(2), chunks[0], stripProgramChanges(c)]) }));
+}
+
+// Program changes would make the template's instruments (e.g. Analog Lab) jump to another preset,
+// so they are removed; the sound comes from the template, not from General MIDI numbers.
+function stripProgramChanges(chunk) {
+  const out = []; let q = 8, carry = 0, status = 0;
+  const end = chunk.length;
+  const vlq = () => { let v = 0, b; do { b = chunk[q++]; v = (v << 7) | (b & 127); } while (b & 128); return v; };
+  const enc = (n) => { const o = [n & 127]; while ((n >>= 7)) o.unshift((n & 127) | 128); return o; };
+  while (q < end) {
+    const delta = vlq(); const start = q;
+    let s = chunk[q];
+    if (s & 0x80) { status = s; q++; } else s = status;
+    if (s === 0xff) { q++; const len = vlq(); q += len; }
+    else if (s === 0xf0 || s === 0xf7) { const len = vlq(); q += len; }
+    else q += (s & 0xf0) === 0xc0 || (s & 0xf0) === 0xd0 ? 1 : 2;
+    if ((s & 0xf0) === 0xc0) { carry += delta; continue; }
+    const body = [...chunk.subarray(start, q)];
+    if (!(chunk[start] & 0x80) && s !== 0xff) body.unshift(s); // write explicit status (running status may have pointed at a removed event)
+    out.push(...enc(delta + carry), ...body); carry = 0;
+  }
+  const h = Buffer.from('MTrk'); const len = Buffer.alloc(4); len.writeUInt32BE(out.length);
+  return Buffer.concat([h, len, Buffer.from(out)]);
 }
 
 function trackChunks(rpp) { // [{ name, text }] for each top-level <TRACK … > block
