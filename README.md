@@ -32,7 +32,7 @@ runs locally on your Mac. There are no servers and no extra fees.
 Requires macOS, Logic Pro, Node.js 18+ and Claude Code or Claude Desktop.
 
 ```bash
-git clone https://github.com/<you>/logic-ai-composer.git
+git clone https://github.com/dodomovic/logic-ai-composer.git
 cd logic-ai-composer && npm install
 ```
 

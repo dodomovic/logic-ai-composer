@@ -32,7 +32,7 @@ Funciona com a sua pr√≥pria conta do Claude (Claude Code ou Claude Desktop). O √
 Requer macOS, Logic Pro, Node.js 18+ e Claude Code ou Claude Desktop.
 
 ```bash
-git clone https://github.com/<you>/logic-ai-composer.git
+git clone https://github.com/dodomovic/logic-ai-composer.git
 cd logic-ai-composer && npm install
 ```
 

@@ -24,7 +24,7 @@
 필요 사항: macOS, Logic Pro, Node.js 18 이상, Claude Code 또는 Claude Desktop.
 
 ```bash
-git clone https://github.com/<you>/logic-ai-composer.git
+git clone https://github.com/dodomovic/logic-ai-composer.git
 cd logic-ai-composer && npm install
 ```
 

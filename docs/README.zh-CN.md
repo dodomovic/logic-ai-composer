@@ -24,7 +24,7 @@
 需要 macOS、Logic Pro、Node.js 18+，以及 Claude Code 或 Claude Desktop。
 
 ```bash
-git clone https://github.com/<you>/logic-ai-composer.git
+git clone https://github.com/dodomovic/logic-ai-composer.git
 cd logic-ai-composer && npm install
 ```
 

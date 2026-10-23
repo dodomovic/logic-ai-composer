@@ -31,7 +31,7 @@ procesa localmente en tu Mac. No hay servidores ni costes extra.
 Requiere macOS, Logic Pro, Node.js 18+ y Claude Code o Claude Desktop.
 
 ```bash
-git clone https://github.com/<you>/logic-ai-composer.git
+git clone https://github.com/dodomovic/logic-ai-composer.git
 cd logic-ai-composer && npm install
 ```
 
