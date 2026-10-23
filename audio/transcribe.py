@@ -108,6 +108,41 @@ def drums(path, bpm):
     return notes
 
 
+DRUMSEP_MODEL = 'MDX23C-DrumSep-aufr33-jarredou.ckpt'  # weights' license is undocumented: opt-in only
+# Onset thresholds (envelope normalised to 0–1); toms and cymbals pick up bleed, so need more.
+DRUMSEP_DELTA = {'kick': 0.07, 'snare': 0.07, 'hh': 0.07, 'toms': 0.2, 'ride': 0.2, 'crash': 0.25}
+DRUMSEP_NOTES = {'kick': 36, 'snare': 38, 'toms': 47, 'hh': 42, 'ride': 51, 'crash': 49}
+
+
+def drumsep(path, bpm, work):
+    # Splits the drum stem into kick, snare, toms, hi-hat, ride and crash, then finds
+    # the hits on each piece separately.
+    from audio_separator.separator import Separator
+    out = work / 'drumsep' / Path(path).parent.name
+    out.mkdir(parents=True, exist_ok=True)
+    sep = Separator(output_dir=str(out), model_file_dir=str(work.parent / 'models' / 'separator'), output_format='WAV')
+    sep.load_model(DRUMSEP_MODEL)
+    sep.separate(str(path), {k.capitalize(): k for k in DRUMSEP_NOTES} | {k: k for k in DRUMSEP_NOTES})
+    spb = 60.0 / bpm
+    notes = []
+    for piece in DRUMSEP_NOTES:
+        f = out / f'{piece}.wav'
+        if not f.exists():
+            continue
+        y, sr = librosa.load(str(f), sr=22050, mono=True)
+        if np.sqrt(np.mean(y ** 2)) < 1e-3:
+            continue
+        env = librosa.onset.onset_strength(y=y, sr=sr, hop_length=256)
+        gap = 0.05 if piece == 'hh' else 0.08
+        frames = librosa.onset.onset_detect(onset_envelope=env, sr=sr, hop_length=256, delta=DRUMSEP_DELTA[piece],
+                                            wait=int(gap * sr / 256), units='frames')
+        peak = env.max() or 1.0
+        for fr in frames:
+            notes.append({'pitch': DRUMSEP_NOTES[piece], 'start': round(fr * 256 / sr / spb, 3), 'duration': 0.25,
+                          'velocity': int(max(35, min(127, env[fr] / peak * 127)))})
+    return sorted(notes, key=lambda n: n['start'])
+
+
 def main():
     out = sys.stdout
     sys.stdout = sys.stderr  # libraries print progress; keep stdout for JSON
@@ -132,7 +167,7 @@ def main():
                     tracks.append({'name': PARTS[stem], 'notes': notes})
         if stems['drums'].exists():
             log('transcribing drums...')
-            tracks.append({'name': 'Drums', 'notes': drums(stems['drums'], bpm)})
+            tracks.append({'name': 'Drums', 'notes': drumsep(stems['drums'], bpm, work) if '--drumsep' in sys.argv else drums(stems['drums'], bpm)})
     out.write(json.dumps({'bpm': bpm, 'key': key, 'tracks': tracks}))
 
 

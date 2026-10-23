@@ -86,12 +86,13 @@ server.tool(
   {
     file: z.string().describe('Absolute path to the audio file'),
     separateStems: z.boolean().default(true).describe('false for a single solo instrument recording'),
+    drumSep: z.boolean().default(process.env.LOGIC_AI_DRUMSEP === '1').describe('Split drums into kick/snare/toms/hi-hat/ride/crash with the DrumSep model (better drum MIDI; its weights have no documented license, so it is opt-in)'),
     openInLogic: z.boolean().default(true),
   },
-  async ({ file, separateStems, openInLogic }) => {
+  async ({ file, separateStems, drumSep, openInLogic }) => {
     if (!existsSync(PYTHON)) return { isError: true, content: [{ type: 'text', text: `Audio tools are not installed. Run: npm run setup-audio (installs into ${AUDIO_HOME}).` }] };
     if (!existsSync(file)) return { isError: true, content: [{ type: 'text', text: `File not found: ${file}` }] };
-    const args = [SCRIPT, file, join(AUDIO_HOME, 'work'), ...(separateStems ? [] : ['--no-stems'])];
+    const args = [SCRIPT, file, join(AUDIO_HOME, 'work'), ...(separateStems ? [] : ['--no-stems']), ...(drumSep ? ['--drumsep'] : [])];
     const json = await new Promise((resolve, reject) => execFile(PYTHON, args, {
       maxBuffer: 64 << 20, env: { ...process.env, TORCH_HOME: join(AUDIO_HOME, 'models') },
     }, (err, stdout, stderr) => (err ? reject(new Error(stderr.split('\n').slice(-5).join('\n'))) : resolve(stdout))));
