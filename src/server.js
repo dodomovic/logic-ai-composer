@@ -176,8 +176,9 @@ server.tool(
     midiFile: z.string().describe('Path of the .mid returned by write_midi'),
     bpm: z.number().min(20).max(300),
     bars: z.number().int().min(1).describe('Song length in bars (4/4)'),
+    openInReaper: z.boolean().default(true).describe('Open the finished project in REAPER so the user can change sounds, levels and effects'),
   },
-  async ({ midiFile, bpm, bars }) => {
+  async ({ midiFile, bpm, bars, openInReaper }) => {
     if (!reaperReady()) return { isError: true, content: [{ type: 'text', text: `REAPER or the instrument template is missing (${TEMPLATE}). Install REAPER and create the template first.` }] };
     const title = basename(midiFile).replace(/\.mid$/i, '');
     const outDir = join(OUT_DIR, 'Renders', title);
@@ -189,6 +190,7 @@ server.tool(
       { maxBuffer: 8 << 20 }, (err, stdout, stderr) => (err ? reject(new Error(stderr.split('\n').slice(-5).join('\n'))) : resolve(JSON.parse(stdout)))));
     const mp3 = join(outDir, `${title}.mp3`);
     await new Promise((resolve) => execFile('ffmpeg', ['-loglevel', 'error', '-y', '-i', master, '-c:a', 'libmp3lame', '-b:a', '320k', mp3], () => resolve()));
+    if (openInReaper && process.platform === 'darwin') execFile('open', ['-a', 'REAPER', project], () => {});
     return { content: [{ type: 'text', text: `Rendered ${tracks} tracks in REAPER and mastered.\nWAV: ${master}\nMP3: ${mp3}\nREAPER project: ${project}\n` +
       `Loudness ${report.after.lufs} LUFS, true peak ${report.after.true_peak_dbtp} dBTP.` }] };
   },
