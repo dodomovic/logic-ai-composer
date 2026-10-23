@@ -21,6 +21,7 @@ runs locally on your Mac. There are no servers and no extra fees.
 - **Audio → MIDI**: splits a song into stems (vocals, bass, guitar, piano, other,
   drums) and transcribes each to its own MIDI track.
 - **Covers**: keeps the melody and harmony of your song and re-arranges it in a new style.
+- **Lyrics and vocals**: Claude writes original lyrics in any language and style (or uses yours) and a singable vocal melody, one syllable per note, plus a lyric sheet.
 - **Master**: masters your Logic bounce for Spotify, Apple Music and YouTube
   (-14 LUFS, ≤ -1 dBTP, 24-bit WAV) and reports the loudness numbers.
 - **Mix and Dolby Atmos guide**: Claude walks you through a starting mix and an

@@ -117,3 +117,32 @@ Then:
      true peak ≤ -1 dBTP (Apple Music Atmos spec), using Logic's Dolby Atmos plug-in meter.
   4. File → Export → Project as ADM BWF, which distributors accept for Apple Music
      Spatial Audio, plus the stereo master above.
+
+## Lyrics and vocal melody
+
+When the user wants lyrics, or gives their own, write them and a "Vocals" track
+whose notes carry the syllables (`lyric` on each note), and pass the full text as
+`lyrics` so a lyric sheet is saved next to the MIDI.
+
+- **Write in the requested language and style**: theme, imagery and vocabulary of
+  the genre (metal: dark, heavy, direct; pop: personal, catchy hook; rap: dense
+  internal rhymes). Original lyrics only; never reproduce existing song lyrics.
+- **Structure follows the song**: label sections ([Verse 1], [Pre-Chorus], [Chorus],
+  [Bridge]); each lyric line fits a musical phrase (usually 2 or 4 bars). The
+  chorus carries the title/hook and repeats with the same words.
+- **Rhyme and metre**: consistent syllable counts between matching lines, a clear
+  rhyme scheme (AABB, ABAB or ABCB), stronger rhymes in the chorus.
+- **Prosody**: put stressed syllables on strong beats (1 and 3, or the downbeat of
+  a phrase) and long vowels on long notes; never stretch an unstressed syllable
+  over a long note. In Turkish, stress usually falls on the last syllable of a word,
+  except place names, adverbs and some suffixes. Leave breaths (a rest of at least
+  half a beat) between lines.
+- **One syllable per note**: split words with hyphens ("for-", "-ev-", "-er").
+  For a melisma (one syllable across several notes) give the following notes
+  `lyric: "-"`.
+- **Vocal melody**: stay in a singable range (male tenor/baritone A2–A4, female
+  alto/soprano F3–F5; metal belts and screams up to A4/B4 for male), mostly
+  stepwise with occasional leaps on emotional words, verses lower and quieter,
+  chorus higher and stronger. Use chord tones on strong beats.
+- **Harmony vocals (optional)**: a "Backing Vocals" track a third or sixth above
+  on the chorus.

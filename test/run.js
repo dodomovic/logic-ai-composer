@@ -21,3 +21,7 @@ const parsed = readMidi(buildMidi(song));
 assert.equal(parsed.length, 4);
 assert.deepEqual(parsed.slice(1).map((t) => [t.name, t.notes]), [['Piano', 14], ['Bass', 4], ['Drums', 8]]);
 console.log('ok');
+
+const sung = buildMidi({ title: 'L', bpm: 90, tracks: [{ name: 'Vocals', notes: [{ pitch: 'D4', start: 0, duration: 1, lyric: 'Hel-' }, { pitch: 'F4', start: 1, duration: 1, lyric: 'lo' }] }] });
+assert.ok(sung.includes(Buffer.from([0xff, 0x05, 4, ...Buffer.from('Hel-')])));
+console.log('lyrics ok');

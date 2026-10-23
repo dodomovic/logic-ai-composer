@@ -69,6 +69,10 @@ export function buildMidi(song) {
       const off = on + Math.max(1, Math.round(Number(n.duration) * PPQ));
       if (!(on >= 0)) throw new Error(`Bad start for ${n.pitch} in "${t.name}"`);
       const vel = Math.max(1, Math.min(127, Math.round(n.velocity ?? 90)));
+      if (n.lyric) { // one syllable per note, as a lyric meta event (shown in Logic's Score and lyric views)
+        const l = text(n.lyric);
+        ev.push({ tick: on, order: 2, data: [0xff, 0x05, ...vlq(l.length), ...l] });
+      }
       ev.push({ tick: on, order: 2, data: [0x90 | ch, pitch, vel] });
       ev.push({ tick: off, order: 1, data: [0x80 | ch, pitch, 0] });
     }

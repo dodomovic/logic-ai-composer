@@ -38,6 +38,7 @@ const note = z.object({
   start: z.number().min(0).describe('Start position in beats (quarter notes) from the beginning'),
   duration: z.number().positive().describe('Length in beats'),
   velocity: z.number().int().min(1).max(127).optional().describe('Loudness 1-127, default 90'),
+  lyric: z.string().optional().describe('Vocal tracks: the syllable sung on this note ("love", "for-", "-ev-", "-er"); "-" continues the previous syllable (melisma)'),
 });
 
 server.tool(
@@ -55,6 +56,7 @@ server.tool(
       channel: z.number().int().min(0).max(15).optional(),
       notes: z.array(note).min(1),
     })).min(1),
+    lyrics: z.string().optional().describe('Full lyrics with section labels ([Verse 1], [Chorus] …); saved as a .txt next to the MIDI'),
     openInLogic: z.boolean().default(true),
   },
   async (song) => {
@@ -63,6 +65,7 @@ server.tool(
     const safe = song.title.replace(/[^\p{L}\p{N} _-]+/gu, '').trim().slice(0, 60) || 'idea';
     const file = join(OUT_DIR, `${safe} ${new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-')}.mid`);
     writeFileSync(file, data);
+    if (song.lyrics) writeFileSync(file.replace(/\.mid$/, ' (Lyrics).txt'), `${song.title}\n\n${song.lyrics.trim()}\n`);
     let opened = '';
     if (song.openInLogic && process.platform === 'darwin') {
       const app = process.env.LOGIC_APP || (existsSync('/Applications/Logic Pro.app') ? 'Logic Pro' : existsSync('/Applications/Logic Pro Creator Studio.app') ? 'Logic Pro Creator Studio' : 'Logic Pro');

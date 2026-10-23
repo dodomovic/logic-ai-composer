@@ -21,6 +21,7 @@ Mac'inde yerel olarak yapılır. Sunucu yok, ek ücret yok.
 - **Sesten MIDI'ye**: Şarkıyı kanallara ayırır (vokal, bas, gitar, piyano, diğer,
   davul) ve her birini ayrı bir MIDI kanalına çevirir.
 - **Cover**: Şarkının melodisini ve armonisini korur, yeni bir tarzda yeniden düzenler.
+- **Söz ve vokal**: Claude istediğin dilde ve tarzda özgün sözler yazar (ya da seninkileri kullanır) ve söylenebilir bir vokal melodisi oluşturur; her notada bir hece, ayrıca söz dosyası.
 - **Mastering**: Logic'ten aldığın bounce'u Spotify, Apple Music ve YouTube için
   master eder (-14 LUFS, ≤ -1 dBTP, 24 bit WAV) ve ses seviyesi raporu verir.
 - **Mix ve Dolby Atmos rehberi**: Claude, Logic içinde başlangıç mix'ini, Atmos
