@@ -31,6 +31,20 @@ function trackChunk(events) {
   return chunk('MTrk', bytes);
 }
 
+// General MIDI programs guessed from a track name, so Logic Pro (which maps GM program changes
+// to its own patches on import) loads a fitting instrument even when no program is given.
+const GM_GUESS = [ // first match wins, so specific names come before general ones
+  [/choir|aah|koro/i, 52], [/vocal|vox|voice|vokal/i, 54], [/pizz/i, 45], [/string|yayl|violin|cello/i, 48],
+  [/rhodes|e\.?piano/i, 4], [/piano|piyano|keys/i, 0], [/organ/i, 16], [/acoustic.*guitar|akustik/i, 25],
+  [/lead guitar|solo gitar|solo guitar/i, 29], [/guitar|gitar/i, 30], [/synth ?bass|sub|808|trance bass|rolling/i, 38],
+  [/bass|\bbas\b/i, 33], [/pluck/i, 80], [/harp|\barp/i, 46], [/gate|pad/i, 90], [/supersaw|saw|lead|melody|melodi/i, 81],
+  [/synth/i, 90], [/brass|horn|trumpet/i, 61], [/flute|flüt/i, 73], [/bell/i, 14],
+];
+export function guessProgram(name = '') {
+  for (const [re, prog] of GM_GUESS) if (re.test(name)) return prog;
+  return undefined;
+}
+
 const KEY_SIGS = { // major-key sharps(+)/flats(-)
   C: 0, G: 1, D: 2, A: 3, E: 4, B: 5, 'F#': 6, 'C#': 7, F: -1, Bb: -2, Eb: -3, Ab: -4, Db: -5, Gb: -6, Cb: -7,
 };
@@ -62,7 +76,12 @@ export function buildMidi(song) {
   song.tracks.forEach((t, i) => {
     const ch = Math.max(0, Math.min(15, t.channel ?? (/drum|perc|davul/i.test(t.name || '') ? 9 : i % 16 === 9 ? 10 : i % 16)));
     const ev = [{ tick: 0, order: 0, data: [0xff, 0x03, ...vlq(text(t.name || `Part ${i + 1}`).length), ...text(t.name || `Part ${i + 1}`)] }];
-    if (t.program !== undefined && ch !== 9) ev.push({ tick: 0, order: 0, data: [0xc0 | ch, t.program & 127] });
+    const program = t.program ?? guessProgram(t.name);
+    if (t.instrument || t.name) { // instrument name meta event, shown by DAWs that read it
+      const inst = text(t.instrument || t.name);
+      ev.push({ tick: 0, order: 0, data: [0xff, 0x04, ...vlq(inst.length), ...inst] });
+    }
+    if (program !== undefined && ch !== 9) ev.push({ tick: 0, order: 0, data: [0xc0 | ch, program & 127] });
     for (const n of t.notes || []) {
       const pitch = noteNumber(n.pitch);
       const on = Math.round(Number(n.start) * PPQ);
