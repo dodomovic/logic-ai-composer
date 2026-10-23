@@ -82,7 +82,7 @@ for a 4-minute song; older or Intel Macs take longer.
 |---|---|
 | `chord_notes` | Chord symbols → notes (`Am7`, `Fmaj7`, `C/E`, `G7sus4`, …) |
 | `scale_notes` | Notes of a scale (major, minor, modes, pentatonic, blues, hicaz) |
-| `write_midi` | Writes the parts to a multi-track `.mid` and opens it in Logic Pro |
+| `write_midi` | Writes the parts to a multi-track `.mid` and opens it in Logic Pro; optional drum engine (trance, melodic techno, dance/house) and controller automation |
 | `audio_to_midi` | Song → stems → multi-track MIDI, plus tempo, key and all notes for covers |
 | `master_audio` | Masters a bounced mix for streaming, with a before/after loudness report |
 

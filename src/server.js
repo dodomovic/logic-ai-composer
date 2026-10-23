@@ -11,6 +11,7 @@ import { homedir } from 'node:os';
 import { basename, join } from 'node:path';
 import { execFile } from 'node:child_process';
 import { buildMidi } from './midi.js';
+import { DRUM_STYLES, programDrums } from './drums.js';
 import { chordNotes, noteName, scaleNotes, KNOWN_SCALES } from './theory.js';
 
 const OUT_DIR = process.env.LOGIC_AI_COMPOSER_DIR || join(homedir(), 'Music', 'Logic AI Composer');
@@ -61,10 +62,16 @@ server.tool(
         value: z.number().min(0).max(127),
       })).optional().describe('Controller automation for smooth, musical dynamics: expression swells on pads/strings, sustain pedal on piano, filter sweeps on synths in build-ups'),
     })).min(1),
+    drums: z.object({
+      style: z.enum(Object.keys(DRUM_STYLES)).describe('trance (Tiësto), melodic-techno (Hozho/Afterlife), faithless (dance/house)'),
+      plan: z.array(z.object({ type: z.enum(['intro', 'groove', 'build', 'drop', 'breakdown', 'outro', 'stop']), bars: z.number().int().min(1) }))
+        .describe('Sections in order, matching the song arrangement'),
+    }).optional().describe('Let the drum engine program the drums (separate Kick, Snare & Clap, Hats, Percussion, Cymbals tracks, with fills, build-ups and swing). Preferred over hand-written drums for electronic styles.'),
     lyrics: z.string().optional().describe('Full lyrics with section labels ([Verse 1], [Chorus] …); saved as a .txt next to the MIDI'),
     openInLogic: z.boolean().default(true),
   },
   async (song) => {
+    if (song.drums) song = { ...song, tracks: [...programDrums(song.drums).tracks, ...song.tracks] };
     const data = buildMidi(song);
     mkdirSync(OUT_DIR, { recursive: true });
     const safe = song.title.replace(/[^\p{L}\p{N} _-]+/gu, '').trim().slice(0, 60) || 'idea';

@@ -79,6 +79,18 @@ picks their own software instrument on each track.
 }
 ```
 
+## Drums
+
+For electronic styles don't write drum notes by hand: pass `drums` to
+`write_midi` with a `style` (`trance` for Tiësto-style, `melodic-techno` for
+Hozho/Afterlife-style, `faithless` for dance/house) and a `plan` of sections
+matching the arrangement (`intro`, `groove`, `build`, `drop`, `breakdown`,
+`outro`, `stop`, each with `bars`). The engine writes separate Kick, Snare & Clap,
+Hats, Percussion and Cymbals tracks with the genre's groove, swing, ghost
+accents, 8/16-bar fills, crashes on phrase starts, snare/clap-roll build-ups with
+a silent beat before the drop, no kick in breakdowns, and DJ-friendly intros and
+outros where elements arrive or leave every 4 bars.
+
 ## Making electronic tracks sound right
 
 - Repetition is the point: loop 8- or 16-bar patterns and change the arrangement
