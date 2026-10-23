@@ -1,25 +1,34 @@
 # Logic AI Composer
 
+**English** · [Türkçe](docs/README.tr.md) · [Español](docs/README.es.md) · [Deutsch](docs/README.de.md) · [Français](docs/README.fr.md) · [Português](docs/README.pt-BR.md) · [日本語](docs/README.ja.md) · [한국어](docs/README.ko.md) · [简体中文](docs/README.zh-CN.md)
+
 Describe the music you want, and Claude writes the MIDI: every note of every
 part, in your style, key and chords. Each part lands on its own track in Logic
 Pro, so it plays **your own software instruments** (Alchemy, Kontakt, Serum, …)
 and stays fully editable.
 
 > "Lo-fi, 84 BPM, Am7 – Fmaj7 – C – G, piano, bass and drums, 8 bars"
+> "A 3-minute original synthwave song"
+> "Turn ~/Desktop/mysong.wav into MIDI" · "Make a jazz cover of it"
 
-## How it works
+It runs with your own Claude account (Claude Code or Claude Desktop). Audio work
+runs locally on your Mac. There are no servers and no extra fees.
 
-- Claude composes the notes (rhythm, voicing, groove, dynamics).
-- This MCP server spells chords and scales so parts stay in key, writes a
-  multi-track MIDI file, and opens it in Logic Pro.
-- In Logic, choose an instrument on each track and press play.
+## What it does
 
-No audio is generated and nothing about Logic Pro is modified; it only uses
-standard MIDI files.
+- **Compose**: Claude writes original parts or whole songs of any length, in the
+  style, key, tempo and instruments you ask for.
+- **Audio → MIDI**: splits a song into stems (vocals, bass, guitar, piano, other,
+  drums) and transcribes each to its own MIDI track.
+- **Covers**: keeps the melody and harmony of your song and re-arranges it in a new style.
+- **Master**: masters your Logic bounce for Spotify, Apple Music and YouTube
+  (-14 LUFS, ≤ -1 dBTP, 24-bit WAV) and reports the loudness numbers.
+- **Mix and Dolby Atmos guide**: Claude walks you through a starting mix and an
+  Atmos (Spatial Audio) setup and ADM BWF export inside Logic.
 
 ## Install
 
-Requires macOS, Logic Pro and Node.js 18+.
+Requires macOS, Logic Pro, Node.js 18+ and Claude Code or Claude Desktop.
 
 ```bash
 git clone https://github.com/<you>/logic-ai-composer.git
@@ -34,14 +43,34 @@ claude mcp add logic-ai-composer -- node /path/to/logic-ai-composer/src/server.j
 
 Copy `skills/logic-composer` into `~/.claude/skills/` for the composing guide.
 
-**Claude Desktop**: add to `claude_desktop_config.json`:
+**Claude Desktop**: add this to `claude_desktop_config.json`:
 
 ```json
 { "mcpServers": { "logic-ai-composer": { "command": "node", "args": ["/path/to/logic-ai-composer/src/server.js"] } } }
 ```
 
+**Audio features (optional)**: needs Python 3.11.
+
+```bash
+npm run setup-audio
+```
+
+This downloads about 2–3 GB of open-source tools and models to your Mac, not from
+this repository. Set `LOGIC_AI_AUDIO_HOME` to install them elsewhere, for example
+on an external disk.
+
 Files are saved to `~/Music/Logic AI Composer` (set `LOGIC_AI_COMPOSER_DIR` to
 change it). Set `LOGIC_APP` if your Logic Pro app has a different name.
+
+## Using your own songs
+
+Don't upload the song as a chat attachment: attachments go to Claude's servers and
+the tool can't reach them. Drag the file from Finder into the Claude Code prompt
+(it pastes the path), or type where it is, e.g. "Desktop/mysong.wav". The audio
+never leaves your Mac.
+
+Separating a 4-minute song takes about 10 minutes, because it uses the
+best-quality models.
 
 ## Tools
 
@@ -50,37 +79,40 @@ change it). Set `LOGIC_APP` if your Logic Pro app has a different name.
 | `chord_notes` | Chord symbols → notes (`Am7`, `Fmaj7`, `C/E`, `G7sus4`, …) |
 | `scale_notes` | Notes of a scale (major, minor, modes, pentatonic, blues, hicaz) |
 | `write_midi` | Writes the parts to a multi-track `.mid` and opens it in Logic Pro |
-| `audio_to_midi` | Song → stems (vocals, bass, guitar, piano, other, drums) → multi-track MIDI; needs `npm run setup-audio` |
-| `master_audio` | Masters a bounced mix for streaming (-14 LUFS, ≤ -1 dBTP, 24-bit WAV) with a loudness report |
+| `audio_to_midi` | Song → stems → multi-track MIDI, plus tempo, key and all notes for covers |
+| `master_audio` | Masters a bounced mix for streaming, with a before/after loudness report |
 
-## License
+Under the hood:
+- vocals are split with BS-RoFormer;
+- drums and bass with Demucs `htdemucs_ft`, guitar and piano with `htdemucs_6s`, run on the vocal-free instrumental;
+- pitched parts are transcribed with Spotify's Basic Pitch, drums with per-band onset detection;
+- mastering uses Spotify's Pedalboard, and loudness is measured with pyloudnorm (ITU-R BS.1770).
 
-MIT. Logic Pro is a trademark of Apple Inc. This project is not affiliated with
-or endorsed by Apple.
+## Cost
 
-## Audio to MIDI and covers (optional)
+Audio separation, transcription and mastering run on your Mac and use no Claude
+tokens. Claude's tokens are spent only when it reads or writes notes. Roughly:
 
-```bash
-npm run setup-audio   # installs Demucs + Basic Pitch locally (~2 GB, set LOGIC_AI_AUDIO_HOME to choose the folder)
-```
+- reading a transcription: 15–50k tokens;
+- a cover or a new 3-minute song: 40–80k tokens.
 
-Don't upload the song as a chat attachment: attachments go to Claude's servers and
-the tool can't reach them. Drag the file from Finder into the Claude Code prompt
-(it pastes the path) or type where it is, e.g. "my Desktop/mysong.wav". The audio
-never leaves your Mac.
-
-Then ask Claude: "turn ~/Desktop/mysong.wav into MIDI" or "make a lo-fi cover of
-~/Desktop/mysong.wav". Separation and transcription run on your Mac; nothing is uploaded.
-You can also ask for a brand-new song of any length: "a 3-minute original synthwave track".
+With a Claude subscription this costs nothing extra; it counts toward your plan's
+usage limits.
 
 ## Originality and copyright
 
 When Claude writes a song, it composes new notes from the style you describe; it
-does not look up or copy recordings. The composing guide tells it not to reproduce
-existing melodies or chord-for-chord copies of known songs. Style itself (lo-fi,
-synthwave, a tempo, a chord progression like I–V–vi–IV) isn't protected, but a
-recognisable melody is. You can transcribe or cover any audio file you have on your Mac, for example to
-study or practise a song. What you do with the result is up to you, like with any
-DAW or notation tool: releasing a cover or sharing a transcription of someone
-else's song may need the rights holder's licence. Claude composes original
-material itself and won't write out a copyrighted melody from memory.
+does not look up or copy recordings, and it won't write out a copyrighted melody
+from memory. Styles, tempos and common chord progressions aren't protected;
+recognisable melodies are.
+
+You can transcribe or cover any audio file you have on your Mac, for example to
+study or practise a song. What you do with the result is up to you, as with any
+DAW or notation tool. Releasing a cover or sharing a transcription of someone
+else's song may need the rights holder's licence.
+
+## License
+
+MIT. Logic Pro and Dolby Atmos are trademarks of their owners (Apple Inc., Dolby
+Laboratories). This project is not affiliated with or endorsed by them. Models
+downloaded by `setup-audio` keep their own licenses.
