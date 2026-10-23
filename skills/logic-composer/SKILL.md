@@ -37,6 +37,19 @@ picks their own software instrument on each track.
   - Pop: 95–125 BPM, straight 8ths, root-fifth bass on the beat, four-on-floor
     or backbeat drums.
   - House: 120–128 BPM, kick every beat, off-beat open hats, syncopated bass.
+  - Melodic techno: 120–126 BPM, rolling 16th bass on the off-16ths, one hypnotic
+    16th arp over the chords, long pads, a short emotional theme saved for the
+    breakdowns; DJ intro/outro of 16–32 bars of drums only.
+  - Trance / epic trance (e.g. 2000s anthems): 136–140 BPM, minor key, slow harmony
+    (one chord per 2–4 bars, i–VI–iv–V or i–VI–III–VII), offbeat 8th-note bass on
+    the root, a trance-gated supersaw chord (16th gate pattern), a 16th pluck arp,
+    and above all **one memorable theme of long, singing notes** (half and whole
+    notes, stepwise with one leap to the peak, resolving through the leading tone).
+    The theme is introduced softly (piano or strings in the breakdown), then played
+    by the supersaw lead in the drop and doubled in octaves in the final drop.
+    Structure: intro 32 → build 16 → main 32 → breakdown 16 → build-up 8 (snare roll
+    quarters→8ths→16ths→32nds) → drop 32 → bridge 16 → main breakdown 32 (strings
+    alone, then choir) → build-up 16 → drop 32 → outro 24.
   - Trap: 130–150 BPM (half-time feel), rolling hi-hats (1/16, 1/32 rolls),
     808 bass following the kick with long notes.
   - Jazz: swung 8ths, rootless 7th/9th voicings, walking bass on every beat.
@@ -65,6 +78,15 @@ picks their own software instrument on each track.
   ]
 }
 ```
+
+## Making electronic tracks sound right
+
+- Repetition is the point: loop 8- or 16-bar patterns and change the arrangement
+  (add/remove parts, open filters, velocity ramps) rather than the notes.
+- Write the theme first, harmony second, then the drums and bass; one strong
+  motif beats many random notes. Never generate melodies by random walks.
+- Use velocity for build-ups (ramps over 8–16 bars) and leave space: breakdowns
+  drop the kick and bass entirely.
 
 ## Full songs of a given length
 
