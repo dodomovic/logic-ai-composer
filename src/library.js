@@ -53,8 +53,8 @@ const TO_GM = {
   42: 42, 22: 42, 8: 42, 44: 44, 21: 44, 46: 46, 23: 46, 24: 46, 25: 46, 26: 46, 60: 46,
   49: 49, 55: 49, 57: 57, 52: 52, 51: 51, 53: 53, 59: 51, 54: 54, 56: 56, 58: 70,
 };
-const PERC_GM = [60, 61, 62, 63, 64, 69, 70, 75, 76, 54];
-export function toGM(pitch) { return TO_GM[pitch] ?? PERC_GM[pitch % PERC_GM.length]; }
+// Notes with no clear General MIDI equivalent return null and are dropped in GM mode (they stay in 'original' mode).
+export function toGM(pitch) { return TO_GM[pitch] ?? null; }
 
 const TYPES = [
   [/fill/i, 'fill'], [/build/i, 'build'], [/break ?down/i, 'breakdown'], [/break/i, 'break'], [/intro/i, 'intro'],
@@ -91,7 +91,8 @@ export function buildLibrary(roots, { maxPerFolder = 40 } = {}) {
       const type = (TYPES.find(([re]) => re.test(path)) || [, 'groove'])[1];
       grooves.push({
         source: `${root.split(sep).pop()}/${path}`, tags: path.toLowerCase(), bpm, bars, type,
-        notes: parsed.notes.filter((n) => n.beat < bars * 4).map((n) => [toGM(n.pitch), +n.beat.toFixed(3), n.vel]),
+        notes: parsed.notes.filter((n) => n.beat < bars * 4).map((n) => [toGM(n.pitch), +n.beat.toFixed(3), n.vel, n.pitch]),
+        kit: root.split(sep).pop().replace(/^\d+@/, ''),
       });
       perFolder.set(folder, (perFolder.get(folder) || 0) + 1);
     }

@@ -67,6 +67,7 @@ server.tool(
       style: z.enum(Object.keys(DRUM_STYLES)).describe('trance (Tiësto), melodic-techno (Hozho/Afterlife), faithless (dance/house)'),
       plan: z.array(z.object({ type: z.enum(['intro', 'groove', 'build', 'drop', 'breakdown', 'outro', 'stop']), bars: z.number().int().min(1) }))
         .describe('Sections in order, matching the song arrangement'),
+      kitMap: z.enum(['gm', 'original']).default('gm').describe("'original' keeps the MIDI pack's own drum notes on one track for its own drum plugin (e.g. EZdrummer + EZX Dance), which sounds best; 'gm' maps to Logic's General MIDI kits"),
     }).optional().describe('Let the drum engine program the drums (separate Kick, Snare & Clap, Hats, Percussion, Cymbals tracks, with fills, build-ups and swing). Preferred over hand-written drums for electronic styles.'),
     lyrics: z.string().optional().describe('Full lyrics with section labels ([Verse 1], [Chorus] …); saved as a .txt next to the MIDI'),
     openInLogic: z.boolean().default(true),

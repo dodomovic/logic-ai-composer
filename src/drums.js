@@ -130,7 +130,9 @@ const STYLE_MATCH = {
 const part = (p) => (p === 36 ? 'kick' : [37, 38, 39, 40].includes(p) ? 'snare' : [42, 44, 46].includes(p) ? 'hats'
   : [49, 51, 52, 53, 55, 57].includes(p) ? 'cym' : 'perc');
 
-export function programDrumsFromLibrary({ style = 'trance', plan, library, startBar = 0, seed = 7 }) {
+// kitMap 'original' keeps the pack's own note numbers on ONE track, to be played by the pack's own
+// instrument (e.g. EZdrummer with the matching EZX kit); 'gm' maps to General MIDI for Logic's kits.
+export function programDrumsFromLibrary({ style = 'trance', plan, library, startBar = 0, seed = 7, kitMap = 'gm' }) {
   const want = STYLE_MATCH[style] || STYLE_MATCH.trance;
   let pool = library.filter((g) => want.re.test(g.tags) && g.bpm >= want.bpm[0] && g.bpm <= want.bpm[1]);
   if (pool.length < 10) pool = library.filter((g) => want.re.test(g.tags));
@@ -147,10 +149,12 @@ export function programDrumsFromLibrary({ style = 'trance', plan, library, start
   const used = new Set();
   const lay = (g, atBar, fromBar = 0, bars = g.bars, only = null, velScale = 1) => {
     used.add(g.source);
-    for (const [p, beat, vel] of g.notes) {
+    for (const [gm, beat, vel, orig] of g.notes) {
+      const p = kitMap === 'original' ? orig ?? gm : gm;
+      if (p == null) continue;
       const b = beat - fromBar * 4;
       if (b < 0 || b >= bars * 4) continue;
-      const k = part(p);
+      const k = part(gm ?? 0);
       if (only && !only.includes(k)) continue;
       out[k].push({ pitch: p, start: +(atBar * 4 + b).toFixed(4), duration: 0.2, velocity: Math.max(1, Math.min(127, Math.round(vel * velScale))) });
     }
@@ -187,6 +191,11 @@ export function programDrumsFromLibrary({ style = 'trance', plan, library, start
     // silent last beat before a drop
     if (sec.type === 'build') for (const k of Object.keys(out)) out[k] = out[k].filter((n) => !(n.start >= (bar + sec.bars) * 4 - 1 && n.start < (bar + sec.bars) * 4));
     bar += sec.bars;
+  }
+  if (kitMap === 'original') {
+    const all = Object.values(out).flat().sort((a, b) => a.start - b.start);
+    const kit = main.kit ? ` (${main.kit.replace(/_/g, ' ')} kit)` : '';
+    return { tracks: [{ name: `Drums${kit}`, notes: all }], bars: bar - startBar, sources: [...used], kit: main.kit };
   }
   const tracks = [['Drums – Kick', 'kick'], ['Drums – Snare & Clap', 'snare'], ['Drums – Hats', 'hats'], ['Drums – Percussion', 'perc'], ['Drums – Cymbals', 'cym']]
     .map(([name, k]) => ({ name, notes: out[k] })).filter((t) => t.notes.length);
