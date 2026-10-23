@@ -79,6 +79,8 @@ When Claude writes a song, it composes new notes from the style you describe; it
 does not look up or copy recordings. The composing guide tells it not to reproduce
 existing melodies or chord-for-chord copies of known songs. Style itself (lo-fi,
 synthwave, a tempo, a chord progression like I–V–vi–IV) isn't protected, but a
-recognisable melody is. You are responsible for what you release: if a melody
-sounds familiar, change it or check before publishing. Only cover or transcribe
-music you own or have the rights to.
+recognisable melody is. You can transcribe or cover any audio file you have on your Mac, for example to
+study or practise a song. What you do with the result is up to you, like with any
+DAW or notation tool: releasing a cover or sharing a transcription of someone
+else's song may need the rights holder's licence. Claude composes original
+material itself and won't write out a copyrighted melody from memory.
