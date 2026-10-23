@@ -11,7 +11,8 @@ import { homedir } from 'node:os';
 import { basename, join } from 'node:path';
 import { execFile } from 'node:child_process';
 import { buildMidi } from './midi.js';
-import { DRUM_STYLES, programDrums } from './drums.js';
+import { DRUM_STYLES, programDrums, programDrumsFromLibrary } from './drums.js';
+import { buildLibrary, loadLibrary, saveLibrary } from './library.js';
 import { chordNotes, noteName, scaleNotes, KNOWN_SCALES } from './theory.js';
 
 const OUT_DIR = process.env.LOGIC_AI_COMPOSER_DIR || join(homedir(), 'Music', 'Logic AI Composer');
@@ -71,7 +72,13 @@ server.tool(
     openInLogic: z.boolean().default(true),
   },
   async (song) => {
-    if (song.drums) song = { ...song, tracks: [...programDrums(song.drums).tracks, ...song.tracks] };
+    let drumNote = '';
+    if (song.drums) {
+      const fromLib = programDrumsFromLibrary({ ...song.drums, library: loadLibrary() });
+      const kit = fromLib || programDrums(song.drums);
+      drumNote = fromLib ? ` Drums from your library: ${fromLib.sources.slice(0, 3).join('; ')}.` : ' Drums from the built-in engine (import MIDI packs for real grooves).';
+      song = { ...song, tracks: [...kit.tracks, ...song.tracks] };
+    }
     const data = buildMidi(song);
     mkdirSync(OUT_DIR, { recursive: true });
     const safe = song.title.replace(/[^\p{L}\p{N} _-]+/gu, '').trim().slice(0, 60) || 'idea';
@@ -85,7 +92,7 @@ server.tool(
         resolve(err ? ` Could not open Logic Pro automatically (${err.message.trim()}); drag the file into your project.` : ' Opened in Logic Pro.')));
     }
     const summary = song.tracks.map((t) => `${t.name}: ${t.notes.length} notes`).join(', ');
-    return { content: [{ type: 'text', text: `Saved ${file} (${summary}).${opened}\nIn Logic, pick your own software instrument on each track.` }] };
+    return { content: [{ type: 'text', text: `Saved ${file} (${summary}).${opened}${drumNote}\nIn Logic, pick your own software instrument on each track.` }] };
   },
 );
 
@@ -142,6 +149,19 @@ server.tool(
     const json = await new Promise((resolve, reject) => execFile(PYTHON, [new URL('../audio/master.py', import.meta.url).pathname, file, out, String(targetLufs), String(ceilingDbtp)],
       { maxBuffer: 8 << 20 }, (err, stdout, stderr) => (err ? reject(new Error(stderr.split('\n').slice(-5).join('\n'))) : resolve(stdout))));
     return { content: [{ type: 'text', text: JSON.stringify(JSON.parse(json), null, 1) }] };
+  },
+);
+
+server.tool(
+  'import_midi_library',
+  'Build a local style library from the user\'s own MIDI packs (Toontrack, Splice, …). write_midi then programs drums from these real grooves, ' +
+    'with their human velocities, timing and fills. The library stays on this Mac.',
+  { folders: z.array(z.string()).min(1).describe('Folders containing .mid files; scanned recursively'), maxPerFolder: z.number().int().min(1).max(500).default(60) },
+  async ({ folders, maxPerFolder }) => {
+    const grooves = buildLibrary(folders.filter((f) => existsSync(f)), { maxPerFolder });
+    const file = saveLibrary(grooves);
+    const types = grooves.reduce((a, g) => ({ ...a, [g.type]: (a[g.type] || 0) + 1 }), {});
+    return { content: [{ type: 'text', text: `Library saved to ${file}: ${grooves.length} grooves ${JSON.stringify(types)}.` }] };
   },
 );
 

@@ -120,3 +120,75 @@ export function programDrums({ style = 'trance', plan, startBar = 0 }) {
   ].filter((t) => t.notes.length);
   return { tracks, bars: bar - startBar };
 }
+
+// --- Library mode: real grooves from the user's MIDI packs (see library.js) ---
+const STYLE_MATCH = {
+  trance: { re: /trance|uplifting|edm|uk dance|uptempo/, bpm: [128, 145] },
+  'melodic-techno': { re: /techno|progressive house|tech house|electronic/, bpm: [116, 130] },
+  faithless: { re: /house|uk dance|alternative dance|disco|afro|dance/, bpm: [116, 132] },
+};
+const part = (p) => (p === 36 ? 'kick' : [37, 38, 39, 40].includes(p) ? 'snare' : [42, 44, 46].includes(p) ? 'hats'
+  : [49, 51, 52, 53, 55, 57].includes(p) ? 'cym' : 'perc');
+
+export function programDrumsFromLibrary({ style = 'trance', plan, library, startBar = 0, seed = 7 }) {
+  const want = STYLE_MATCH[style] || STYLE_MATCH.trance;
+  let pool = library.filter((g) => want.re.test(g.tags) && g.bpm >= want.bpm[0] && g.bpm <= want.bpm[1]);
+  if (pool.length < 10) pool = library.filter((g) => want.re.test(g.tags));
+  if (!pool.length) return null;
+  let s = seed;
+  const rnd = () => ((s = (s * 1103515245 + 12345) % 2147483648) / 2147483648);
+  const pick = (arr) => arr[Math.floor(rnd() * arr.length)];
+  const byType = (types) => pool.filter((g) => types.includes(g.type));
+  const grooves = byType(['groove', 'drop']).filter((g) => g.bars <= 8);
+  const fills = byType(['fill']);
+  const builds = byType(['build']);
+  const breakdowns = byType(['breakdown', 'break']);
+  const out = { kick: [], snare: [], hats: [], perc: [], cym: [] };
+  const used = new Set();
+  const lay = (g, atBar, fromBar = 0, bars = g.bars, only = null, velScale = 1) => {
+    used.add(g.source);
+    for (const [p, beat, vel] of g.notes) {
+      const b = beat - fromBar * 4;
+      if (b < 0 || b >= bars * 4) continue;
+      const k = part(p);
+      if (only && !only.includes(k)) continue;
+      out[k].push({ pitch: p, start: +(atBar * 4 + b).toFixed(4), duration: 0.2, velocity: Math.max(1, Math.min(127, Math.round(vel * velScale))) });
+    }
+  };
+  // One main groove for the song and a related variation (same folder when possible), like a producer would.
+  const main = pick(grooves.length ? grooves : pool);
+  const folder = main.source.replace(/\/[^/]*$/, '');
+  const siblings = grooves.filter((g) => g.source.startsWith(folder) && g !== main);
+  const varn = siblings.length ? pick(siblings) : pick(grooves);
+  const tile = (g, bar, i, only, velScale) => lay(g, bar, i % g.bars, 1, only, velScale);
+
+  let bar = startBar;
+  for (const sec of plan) {
+    for (let i = 0; i < sec.bars; i++) {
+      const b = bar + i, phraseEnd = i % 8 === 7 && sec.bars >= 8;
+      const g = i % 16 >= 8 ? varn : main;
+      switch (sec.type) {
+        case 'intro': tile(g, b, i, ['kick', ...(i >= 4 ? ['hats'] : []), ...(i >= 8 ? ['perc'] : []), ...(i >= 12 ? ['snare'] : [])], 0.95); break;
+        case 'groove': case 'drop':
+          if (phraseEnd && fills.length) { tile(g, b, i, ['kick']); lay(pick(fills), b, Math.max(0, pick(fills).bars - 1), 1); }
+          else tile(g, b, i, null, sec.type === 'drop' ? 1 : 0.95);
+          if (sec.type === 'drop' && i % 8 === 0) out.cym.push({ pitch: 49, start: b * 4, duration: 2, velocity: i ? 100 : 120 });
+          break;
+        case 'breakdown': if (i === 0) out.cym.push({ pitch: 49, start: b * 4, duration: 2, velocity: 100 });
+          if (breakdowns.length && i < sec.bars / 2) tile(breakdowns[0], b, i, ['hats', 'perc'], 0.6);
+          break;
+        case 'build':
+          if (i === 0 && builds.length) { const bu = pick(builds); for (let k = 0; k < sec.bars; k++) lay(bu, b + k, k % bu.bars, 1, null, 0.7 + 0.3 * k / sec.bars); }
+          else if (i === 0) { const synth = programDrums({ style, plan: [{ type: 'build', bars: sec.bars }], startBar: b }); for (const t of synth.tracks) for (const n of t.notes) out[part(n.pitch)].push(n); }
+          break;
+        case 'outro': tile(g, b, i, ['kick', ...(i < sec.bars - 4 ? ['hats'] : []), ...(i < sec.bars - 8 ? ['perc', 'snare'] : [])]); break;
+      }
+    }
+    // silent last beat before a drop
+    if (sec.type === 'build') for (const k of Object.keys(out)) out[k] = out[k].filter((n) => !(n.start >= (bar + sec.bars) * 4 - 1 && n.start < (bar + sec.bars) * 4));
+    bar += sec.bars;
+  }
+  const tracks = [['Drums – Kick', 'kick'], ['Drums – Snare & Clap', 'snare'], ['Drums – Hats', 'hats'], ['Drums – Percussion', 'perc'], ['Drums – Cymbals', 'cym']]
+    .map(([name, k]) => ({ name, notes: out[k] })).filter((t) => t.notes.length);
+  return { tracks, bars: bar - startBar, sources: [...used] };
+}
