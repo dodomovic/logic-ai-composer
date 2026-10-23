@@ -88,6 +88,23 @@ picks their own software instrument on each track.
 - Use velocity for build-ups (ramps over 8–16 bars) and leave space: breakdowns
   drop the kick and bass entirely.
 
+## Strong bass and memorable melodies
+
+- **Low end in two layers**: a sustained "Sub Bass" track (root an octave below,
+  one note per chord or per bar) plus a moving mid bass (galloping 16ths around the
+  kick, octave flicks, and a step/chromatic approach note into each chord change).
+  Keep the sub mono and simple; let the mid bass carry the rhythm.
+- **Hooks**: mix rhythms (dotted 8ths, syncopated pickups, a long note at the end
+  of each 2-bar idea), use call and response (bar 1–2 asks, 3–4 answers), then
+  sequence the idea a step higher in the second phrase and save the highest note
+  for one climax. Land chord tones on strong beats, use passing notes in between,
+  and approach the leading tone (e.g. C♯ in D minor) before the cycle repeats.
+- **Richer harmony**: add9, maj7, sus4→3 resolutions, slash chords for a moving
+  bass line, a major V (harmonic minor) before the loop, and a +1 or +2 semitone
+  key change for the final chorus/drop.
+- **Develop, don't just repeat**: introduce the hook softly (pluck or half-speed
+  piano), then full lead, then octave-up, then octave + harmony in thirds.
+
 ## Full songs of a given length
 
 When asked for a whole song ("3 minutes", "random", "something new"):
